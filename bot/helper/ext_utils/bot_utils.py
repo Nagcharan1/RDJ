@@ -152,20 +152,20 @@ def get_readable_message():
                 if download.status() == MirrorStatus.STATUS_CLONING:
                     msg += f"\n<b>○ Cloned:</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
                 elif download.status() == MirrorStatus.STATUS_UPLOADING:
-                    msg += f"\n<b>○ Done ✓:</b> {get_readable_file_size(download.processed_bytes())}\n<b>○ Total: </b>{download.size()}"
+                    msg += f"\n<b>○ Done ✓:</b> <code>{get_readable_file_size(download.processed_bytes())}</code>\n<b>○ Total: </b><code>{download.size()}</code>"
                 else:
-                    msg += f"\n<b>○ Done ✓:</b> {get_readable_file_size(download.processed_bytes())}\n<b>○ Total: </b>{download.size()}"
-                msg += f"\n<b>○ Speed:</b> {download.speed()}\n<b>○ ETA:</b> {download.eta()}"
+                    msg += f"\n<b>○ Done ✓:</b> <code>{get_readable_file_size(download.processed_bytes())}</code>\n<b>○ Total: </b><code>{download.size()}</code>"
+                msg += f"\n<b>○ Speed:</b> <code>{download.speed()}</code>\n<b>○ ETA:</b> <code>{download.eta()}</code>"
                 try:
-                    msg += f"\n<b>○ Seeders:</b> {download.aria_download().num_seeders}" \
-                           f" | <b>○ Peers:</b> {download.aria_download().connections}"
-                    msg += f"\n<b>🚂 Engine:</b> <code>Aria2c</code>"
+                    msg += f"\n<b>○ Seeders:</b> <code>{download.aria_download().num_seeders}</code>" \
+                           f" | <b>○ Peers:</b> <code>{download.aria_download().connections}</code>"
+                    msg += f"\n<b>○ Engine:</b> <code>Aria2c</code>"
                 except:
                     pass
                 try:
-                    msg += f"\n<b>○ Seeders:</b> {download.torrent_info().num_seeds}" \
-                           f" | <b>○ Leechers:</b> {download.torrent_info().num_leechs}"
-                    msg += f"\n<b>🚂 Engine:</b> <code>qBittorrent</code>"
+                    msg += f"\n<b>○ Seeders:</b> <code>{download.torrent_info().num_seeds}</code>" \
+                           f" | <b>○ Leechers:</b> <code>{download.torrent_info().num_leechs}</code>"
+                    msg += f"\n<b>○ Engine:</b> <code>qBittorrent</code>"
                 except:
                     pass
                 reply_to = download.message.reply_to_message    
@@ -173,28 +173,32 @@ def get_readable_message():
                     msg += f"\n<b>○ Source: <a href='https://t.me/c/{str(download.message.chat.id)[4:]}/{reply_to.message_id}'>Link</a></b>"
                 else:
                     msg += f"\n<b>○ Source:</b> <a href='https://t.me/c/{str(download.message.chat.id)[4:]}/{download.message.message_id}'>Link</a>"
-                msg += f"\n<b>○ Adder:</b> ️<code>/warn {download.message.from_user.first_name}</code>️"
-                msg += f"\n<b>○ Elapsed: </b>{get_readable_time(time() - download.message.date.timestamp())}"
+                msg += f'\n<b>○ Adder :</b> <b>{download.message.from_user.first_name}</b> | <code>/ban {download.message.from_user.id}</code>'
+                msg += f"\n<b>○ Elapsed: </b><code>{get_readable_time(time() - download.message.date.timestamp())}</code>"
                 msg += f"\n<b>○ To Cancel:</b> <code>/{BotCommands.CancelMirror} {download.gid()}</code>"
             elif download.status() == MirrorStatus.STATUS_SEEDING:
-                msg += f"\n<b>○ Size: </b>{download.size()}"
-                msg += f"\n<b>🚂 Engine:</b> <code>qBittorrent</code>"
-                msg += f"\n<b>○ Speed: </b>{get_readable_file_size(download.torrent_info().upspeed)}/s"
-                msg += f" | <b>○ Uploaded: </b>{get_readable_file_size(download.torrent_info().uploaded)}"
-                msg += f"\n<b>○ Ratio: </b>{round(download.torrent_info().ratio, 3)}"
-                msg += f" | <b>○ Time: </b>{get_readable_time(download.torrent_info().seeding_time)}"
-                msg += f"\n<b>○ Requested By:</b> ️<code>{download.message.from_user.first_name}</code>️"
-                msg += f"\n<b>○ Elapsed: </b>{get_readable_time(time() - download.message.date.timestamp())}"
+                msg += f"\n<b>○ Size: </b><code>{download.size()}</code>"
+                msg += f"\n<b>○ Engine:</b> <code>qBittorrent</code>"
+                msg += f"\n<b>○ Speed: </b><code>{get_readable_file_size(download.torrent_info().upspeed)}/s</code>"
+                msg += f" | <b>○ Uploaded: </b><code>{get_readable_file_size(download.torrent_info().uploaded)}</code>"
+                msg += f"\n<b>○ Ratio: </b><code>{round(download.torrent_info().ratio, 3)}</code>"
+                msg += f" | <b>○ Time: </b><code>{get_readable_time(download.torrent_info().seeding_time)}</code>"
+                msg += f'\n<b>○ Adder :</b> <b>{download.message.from_user.first_name}</b> | <code>/ban {download.message.from_user.id}</code>'
+                msg += f"\n<b>○ Elapsed: </b><code>{get_readable_time(time() - download.message.date.timestamp())}</code>"
                 msg += f"\n<b>○To Cancel:</b> <code>/{BotCommands.CancelMirror} {download.gid()}</code>"
             else:
-                msg += f"\n<b>○ Size: </b>{download.size()}"
+                msg += f"\n<b>○ Size: </b><code>{download.size()}</code>"
             msg += "\n\n"
             if STATUS_LIMIT is not None and index == STATUS_LIMIT:
                 break
-        bmsg = f"<b>CPU:</b> {cpu_percent()}% | <b>FREE:</b> {get_readable_file_size(disk_usage(DOWNLOAD_DIR).free)}"
-        bmsg += f"\n<b>RAM:</b> {virtual_memory().percent}% | <b>UPTIME:</b> {get_readable_time(time() - botStartTime)}"
-        dlspeed_bytes = 0
-        upspeed_bytes = 0
+        free = get_readable_file_size(disk_usage(DOWNLOAD_DIR).free)
+        currentTime = get_readable_time(time() - botStartTime)
+        bmsg = f"<b>CPU:</b> {cpu_percent()}% | <b>FREE:</b> {free}"
+        dlspeed = get_readable_file_size(dlspeed_bytes)
+        upspeed = get_readable_file_size(upspeed_bytes)
+        bmsg += f"\n\n✥════ @TGFilmZone ════✥" \
+                f"\n<b>RAM:</b> {virtual_memory().percent}% | <b>UPTIME:</b> {currentTime}" \
+                #f"\n<b>DL:</b> {dlspeed}/s | <b>UL:</b> {upspeed}/s"
         for download in list(download_dict.values()):
             spd = download.speed()
             if download.status() == MirrorStatus.STATUS_DOWNLOADING:
