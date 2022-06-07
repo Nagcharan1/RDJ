@@ -191,14 +191,11 @@ def get_readable_message():
             msg += "\n\n"
             if STATUS_LIMIT is not None and index == STATUS_LIMIT:
                 break
-        free = get_readable_file_size(disk_usage(DOWNLOAD_DIR).free)
-        currentTime = get_readable_time(time() - botStartTime)
-        bmsg = f"<b>CPU:</b> {cpu_percent()}% | <b>FREE:</b> {free}"
-        dlspeed = get_readable_file_size(dlspeed_bytes)
-        upspeed = get_readable_file_size(upspeed_bytes)
-        bmsg += f"\n\n✥════ @TGFilmZone ════✥" \
-                f"\n<b>RAM:</b> {virtual_memory().percent}% | <b>UPTIME:</b> {currentTime}" \
-                #f"\n<b>DL:</b> {dlspeed}/s | <b>UL:</b> {upspeed}/s"
+        bmsg = f"<b>CPU:</b> {cpu_percent()}% | <b>FREE:</b> {get_readable_file_size(disk_usage(DOWNLOAD_DIR).free)}"
+        bmsg += f"\n<b>RAM:</b> {virtual_memory().percent}% | <b>UPTIME:</b> {get_readable_time(time() - botStartTime)}"
+        bmsg += f"\n\n✥════ @TGFilmZone ════✥"
+        dlspeed_bytes = 0
+        upspeed_bytes = 0
         for download in list(download_dict.values()):
             spd = download.speed()
             if download.status() == MirrorStatus.STATUS_DOWNLOADING:
