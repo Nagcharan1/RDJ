@@ -58,6 +58,7 @@ class YoutubeDLHelper:
                      'logger': MyLogger(self),
                      'usenetrc': True,
                      'embedsubtitles': True,
+                     'geo_bypass_country':'IN',
                      'prefer_ffmpeg': True,
                      'cookiefile': 'cookies.txt',
                      'ffmpeg_location': '/bin/new-api'}
